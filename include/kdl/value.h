@@ -33,7 +33,7 @@ struct kdl_number {
     union {
         long long integer;
         double floating_point;
-        kdl_str string;
+        kdl_str str;
     };
 };
 
@@ -44,7 +44,7 @@ struct kdl_value {
     union {
         bool boolean;
         kdl_number number;
-        kdl_str string;
+        kdl_str str;
     };
 };
 

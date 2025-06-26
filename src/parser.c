@@ -151,14 +151,14 @@ static void _set_parse_error(kdl_parser* self, char const* message)
 {
     self->event.event = KDL_EVENT_PARSE_ERROR;
     self->event.value.type = KDL_TYPE_STRING;
-    self->event.value.string = (kdl_str){message, strlen(message)};
+    self->event.value.str = (kdl_str){message, strlen(message)};
 }
 
 static void _set_comment_event(kdl_parser* self, kdl_token const* token)
 {
     self->event.event = KDL_EVENT_COMMENT;
     self->event.value.type = KDL_TYPE_STRING;
-    self->event.value.string = token->value;
+    self->event.value.str = token->value;
 }
 
 static kdl_event_data* _next_node(kdl_parser* self, kdl_token* token);
@@ -346,7 +346,7 @@ static kdl_event_data* _next_node(kdl_parser* self, kdl_token* token)
                 // We're good, this is an identifier
                 self->state
                     = (self->state & ~PARSER_FLAG_TYPE_ANNOTATION_START) | PARSER_FLAG_TYPE_ANNOTATION_END;
-                self->waiting_type_annotation = tmp_val.string;
+                self->waiting_type_annotation = tmp_val.str;
                 return NULL;
             } else {
                 _set_parse_error(self, "Expected identifier or string");
@@ -403,7 +403,7 @@ static kdl_event_data* _next_node(kdl_parser* self, kdl_token* token)
                 // We're good, this is an identifier
                 self->state = PARSER_IN_NODE | PARSER_FLAG_WHITESPACE_REQUIRED;
                 self->event.event = KDL_EVENT_START_NODE;
-                self->event.name = tmp_val.string;
+                self->event.name = tmp_val.str;
                 if (self->waiting_type_annotation.data != NULL) {
                     self->event.value.type_annotation = self->waiting_type_annotation;
                     self->waiting_type_annotation = (kdl_str){NULL, 0};
@@ -529,7 +529,7 @@ static kdl_event_data* _next_event_in_node(kdl_parser* self, kdl_token* token)
             self->event.value.type = KDL_TYPE_STRING;
             self->tmp_string_value = self->waiting_prop_name;
             self->waiting_prop_name = (kdl_owned_string){NULL, 0};
-            self->event.value.string = kdl_borrow_str(&self->tmp_string_value);
+            self->event.value.str = kdl_borrow_str(&self->tmp_string_value);
             ev = _apply_slashdash(self);
             enum _kdl_parser_state new_state = PARSER_IN_NODE;
             if ((self->state & PARSER_FLAG_CONTEXTUALLY_ILLEGAL_WHITESPACE) == 0) {
@@ -555,7 +555,7 @@ static kdl_event_data* _next_event_in_node(kdl_parser* self, kdl_token* token)
                 // We're good, this is an identifier
                 self->state
                     = (self->state & ~PARSER_FLAG_TYPE_ANNOTATION_START) | PARSER_FLAG_TYPE_ANNOTATION_END;
-                self->waiting_type_annotation = tmp_val.string;
+                self->waiting_type_annotation = tmp_val.str;
                 return NULL;
             } else {
                 _set_parse_error(self, "Expected identifier or string");
@@ -718,7 +718,7 @@ static bool _parse_value(kdl_parser* self, kdl_token const* token, kdl_value* va
             // no parsing necessary
             *s = kdl_clone_str(&token->value);
             val->type = KDL_TYPE_STRING;
-            val->string = kdl_borrow_str(s);
+            val->str = kdl_borrow_str(s);
             return true;
         } else {
             return false;
@@ -733,7 +733,7 @@ static bool _parse_value(kdl_parser* self, kdl_token const* token, kdl_value* va
             // no parsing necessary
             *s = kdl_clone_str(&token->value);
             val->type = KDL_TYPE_STRING;
-            val->string = kdl_borrow_str(s);
+            val->str = kdl_borrow_str(s);
             return true;
         } else {
             return false;
@@ -747,7 +747,7 @@ static bool _parse_value(kdl_parser* self, kdl_token const* token, kdl_value* va
                 return false;
             }
             val->type = KDL_TYPE_STRING;
-            val->string = kdl_borrow_str(s);
+            val->str = kdl_borrow_str(s);
             return true;
         } else {
             return false;
@@ -776,7 +776,7 @@ static bool _parse_value(kdl_parser* self, kdl_token const* token, kdl_value* va
             return false;
         } else {
             val->type = KDL_TYPE_STRING;
-            val->string = kdl_borrow_str(s);
+            val->str = kdl_borrow_str(s);
             return true;
         }
     }
@@ -787,7 +787,7 @@ static bool _parse_value(kdl_parser* self, kdl_token const* token, kdl_value* va
                 return false;
             } else {
                 val->type = KDL_TYPE_STRING;
-                val->string = kdl_borrow_str(s);
+                val->str = kdl_borrow_str(s);
                 return true;
             }
         } else {
@@ -886,7 +886,7 @@ static bool _parse_value(kdl_parser* self, kdl_token const* token, kdl_value* va
         if (is_identifier) {
             *s = kdl_clone_str(&token->value);
             val->type = KDL_TYPE_STRING;
-            val->string = kdl_borrow_str(s);
+            val->str = kdl_borrow_str(s);
             return true;
         }
         _fallthrough_;
@@ -984,7 +984,7 @@ static bool _parse_decimal_integer(kdl_str number, kdl_value* val, kdl_owned_str
         *s = _kdl_ubigint_as_string_sgn(negative ? -1 : +1, n);
         val->type = KDL_TYPE_NUMBER;
         val->number.type = KDL_NUMBER_TYPE_STRING_ENCODED;
-        val->number.string = kdl_borrow_str(s);
+        val->number.str = kdl_borrow_str(s);
     }
     _kdl_ubigint_free(n);
     return true;
@@ -1114,7 +1114,7 @@ static bool _parse_decimal_float(kdl_str number, kdl_value* val, kdl_owned_strin
 
         val->type = KDL_TYPE_NUMBER;
         val->number.type = KDL_NUMBER_TYPE_STRING_ENCODED;
-        val->number.string = kdl_borrow_str(s);
+        val->number.str = kdl_borrow_str(s);
         return true;
     }
 }
@@ -1170,7 +1170,7 @@ static bool _parse_hex_number(kdl_str number, kdl_value* val, kdl_owned_string* 
         *s = _kdl_ubigint_as_string_sgn(negative ? -1 : +1, n);
         val->type = KDL_TYPE_NUMBER;
         val->number.type = KDL_NUMBER_TYPE_STRING_ENCODED;
-        val->number.string = kdl_borrow_str(s);
+        val->number.str = kdl_borrow_str(s);
     }
     _kdl_ubigint_free(n);
     return true;
@@ -1227,7 +1227,7 @@ static bool _parse_octal_number(kdl_str number, kdl_value* val, kdl_owned_string
         *s = _kdl_ubigint_as_string_sgn(negative ? -1 : +1, n);
         val->type = KDL_TYPE_NUMBER;
         val->number.type = KDL_NUMBER_TYPE_STRING_ENCODED;
-        val->number.string = kdl_borrow_str(s);
+        val->number.str = kdl_borrow_str(s);
     }
     _kdl_ubigint_free(n);
     return true;
@@ -1284,7 +1284,7 @@ static bool _parse_binary_number(kdl_str number, kdl_value* val, kdl_owned_strin
         *s = _kdl_ubigint_as_string_sgn(negative ? -1 : +1, n);
         val->type = KDL_TYPE_NUMBER;
         val->number.type = KDL_NUMBER_TYPE_STRING_ENCODED;
-        val->number.string = kdl_borrow_str(s);
+        val->number.str = kdl_borrow_str(s);
     }
     _kdl_ubigint_free(n);
     return true;

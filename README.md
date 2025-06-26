@@ -1,3 +1,21 @@
+# ckdl forked for V
+
+This is a fork of Tjol's [ckdl](https://github.com/tjol/ckdl) modified to work a
+little bit better with V (i.e, renaming some struct fields) for
+[vkdl](https://github.com/emmathemartian/vkdl).
+
+This is temporary until there's a better solution that allows me to not have to
+modify the C code of the library when binding from V.
+
+## Differences
+
+- Renamed `kdl_number`'s `string` to `str`
+- Renamed `kdl_value`'s `string` to `str`
+
+---
+
+**Original readme:**
+
 # ckdl - KDL reading and writing for C, Python, C++
 
 **ckdl** is a C (C11) library that implements reading and writing the
@@ -11,8 +29,8 @@ structure relatively directly.
 
 This repository currently contains language bindings for:
 
- * Python
- * C++20
+- Python
+- C++20
 
 The C and C++ parts are built with CMake.
 

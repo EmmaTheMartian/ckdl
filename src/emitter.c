@@ -229,7 +229,7 @@ static bool _emit_number(kdl_emitter* self, kdl_number const* n)
         kdl_free_string(&float_str);
         return ok;
     case KDL_NUMBER_TYPE_STRING_ENCODED:
-        return self->write_func(self->write_user_data, n->string.data, n->string.len) == n->string.len;
+        return self->write_func(self->write_user_data, n->str.data, n->str.len) == n->str.len;
     }
     return false;
 }

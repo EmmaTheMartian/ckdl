@@ -134,7 +134,7 @@ int main(int argc, char** argv)
         if (event->name.data != NULL) {
             kdl_value name_val = (kdl_value){
                 .type = KDL_TYPE_STRING, .type_annotation = {NULL, 0},
-                     .string = event->name
+                     .str = event->name
             };
             (void)kdl_emit_property(emitter, name_str, &name_val);
         }
