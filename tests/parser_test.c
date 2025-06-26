@@ -35,7 +35,7 @@ static void test_basics(void)
     ev = kdl_parser_next_event(parser);
     ASSERT(ev->event == KDL_EVENT_ARGUMENT);
     ASSERT(ev->value.type == KDL_TYPE_STRING);
-    ASSERT(memcmp(ev->value.string.data, garcon, 7) == 0);
+    ASSERT(memcmp(ev->value.str.data, garcon, 7) == 0);
     ASSERT(ev->value.type_annotation.data == NULL);
     ASSERT(ev->name.data == NULL);
 
@@ -50,7 +50,7 @@ static void test_basics(void)
     ev = kdl_parser_next_event(parser);
     ASSERT(ev->event == KDL_EVENT_ARGUMENT);
     ASSERT(ev->value.type == KDL_TYPE_STRING);
-    ASSERT(memcmp(ev->value.string.data, garcon, 7) == 0);
+    ASSERT(memcmp(ev->value.str.data, garcon, 7) == 0);
     ASSERT(ev->value.type_annotation.data == NULL);
     ASSERT(ev->name.data == NULL);
 

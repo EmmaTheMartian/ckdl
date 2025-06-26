@@ -33,7 +33,7 @@ static void test_basics_v1(void)
     v.number = (kdl_number){.type = KDL_NUMBER_TYPE_FLOATING_POINT, .floating_point = 1.0};
     ASSERT(kdl_emit_arg(emitter, &v));
     v.type = KDL_TYPE_STRING;
-    v.string = kdl_str_from_cstr("b");
+    v.str = kdl_str_from_cstr("b");
     ASSERT(kdl_emit_property(emitter, kdl_str_from_cstr("a"), &v));
     ASSERT(kdl_emit_node_with_type(emitter, kdl_str_from_cstr("ta"), kdl_str_from_cstr("second-child")));
     ASSERT(kdl_finish_emitting_children(emitter));
@@ -72,7 +72,7 @@ static void test_basics_v2(void)
     v.number = (kdl_number){.type = KDL_NUMBER_TYPE_FLOATING_POINT, .floating_point = 1.0};
     ASSERT(kdl_emit_arg(emitter, &v));
     v.type = KDL_TYPE_STRING;
-    v.string = kdl_str_from_cstr("b");
+    v.str = kdl_str_from_cstr("b");
     ASSERT(kdl_emit_property(emitter, kdl_str_from_cstr("a"), &v));
     ASSERT(kdl_emit_node_with_type(emitter, kdl_str_from_cstr("ta"), kdl_str_from_cstr("second-child")));
     ASSERT(kdl_finish_emitting_children(emitter));
@@ -103,9 +103,9 @@ static void test_data_types(void)
             .type = KDL_TYPE_NUMBER,
             .number = (kdl_number){.type = KDL_NUMBER_TYPE_FLOATING_POINT, .floating_point = -INFINITY}
     }));
-    ASSERT(kdl_emit_arg(emitter, &(kdl_value){.type = KDL_TYPE_STRING, .string = kdl_str_from_cstr("abc")}));
+    ASSERT(kdl_emit_arg(emitter, &(kdl_value){.type = KDL_TYPE_STRING, .str = kdl_str_from_cstr("abc")}));
     ASSERT(
-        kdl_emit_arg(emitter, &(kdl_value){.type = KDL_TYPE_STRING, .string = kdl_str_from_cstr("abc def")}));
+        kdl_emit_arg(emitter, &(kdl_value){.type = KDL_TYPE_STRING, .str = kdl_str_from_cstr("abc def")}));
     ASSERT(kdl_emit_arg(emitter, &(kdl_value){.type = KDL_TYPE_BOOLEAN, .boolean = true}));
     ASSERT(kdl_emit_arg(emitter, &(kdl_value){.type = KDL_TYPE_BOOLEAN, .boolean = false}));
     ASSERT(kdl_emit_arg(emitter, &(kdl_value){.type = KDL_TYPE_NULL}));
@@ -128,7 +128,7 @@ static void test_ascii_mode(void)
     ASSERT(emitter);
     ASSERT(kdl_emit_node(emitter, kdl_str_from_cstr("\xc3\xa4"))); // ä U+00E4
     ASSERT(kdl_emit_arg(
-        emitter, &(kdl_value){.type = KDL_TYPE_STRING, .string = kdl_str_from_cstr("\xc3\xb6")})); // ö U+00F6
+        emitter, &(kdl_value){.type = KDL_TYPE_STRING, .str = kdl_str_from_cstr("\xc3\xb6")})); // ö U+00F6
     ASSERT(kdl_emit_end(emitter));
 
     kdl_str result = kdl_get_emitter_buffer(emitter);

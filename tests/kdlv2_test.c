@@ -439,8 +439,8 @@ static void test_parser_comment_in_property(void)
     ASSERT(ev->name.len == 3);
     ASSERT(memcmp(ev->name.data, "key", 3) == 0);
     ASSERT(ev->value.type == KDL_TYPE_STRING);
-    ASSERT(ev->value.string.len == 5);
-    ASSERT(memcmp(ev->value.string.data, "value", 5) == 0);
+    ASSERT(ev->value.str.len == 5);
+    ASSERT(memcmp(ev->value.str.data, "value", 5) == 0);
 
     kdl_destroy_parser(parser);
 }
@@ -467,8 +467,8 @@ static void test_parser_comment_in_type(void)
     ASSERT(ev->event == KDL_EVENT_ARGUMENT);
     ASSERT(ev->name.data == NULL);
     ASSERT(ev->value.type == KDL_TYPE_STRING);
-    ASSERT(ev->value.string.len == 3);
-    ASSERT(memcmp(ev->value.string.data, "arg", 3) == 0);
+    ASSERT(ev->value.str.len == 3);
+    ASSERT(memcmp(ev->value.str.data, "arg", 3) == 0);
     ASSERT(ev->value.type_annotation.len == 2);
     ASSERT(memcmp(ev->value.type_annotation.data, "t2", 2) == 0);
 

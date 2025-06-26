@@ -294,7 +294,7 @@ static bool _emit_value(kdl_emitter* self, kdl_value const* v)
             return _write_string_literal_ok(self, "#null");
         }
     case KDL_TYPE_STRING:
-        return _emit_string(self, v->string);
+        return _emit_string(self, v->str);
     case KDL_TYPE_NUMBER:
         return _emit_number(self, &v->number);
     case KDL_TYPE_BOOLEAN:

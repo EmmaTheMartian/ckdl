@@ -50,13 +50,13 @@ cdef _convert_kdl_value_no_type(const kdl_value* v):
         elif v.number.type == KDL_NUMBER_TYPE_FLOATING_POINT:
             return v.number.floating_point
         elif v.number.type == KDL_NUMBER_TYPE_STRING_ENCODED:
-            s = _kdl_str_to_py_str(&v.number.string)
+            s = _kdl_str_to_py_str(&v.number.str)
             try:
                 return int(s)
             except ValueError:
                 return float(s)
     elif v.type == KDL_TYPE_STRING:
-        return _kdl_str_to_py_str(&v.string)
+        return _kdl_str_to_py_str(&v.str)
     raise RuntimeError("Invalid kdl_value object!")
 
 cdef _convert_kdl_value(const kdl_value* v):
@@ -215,7 +215,7 @@ cdef kdl_value _make_kdl_value(value, kdl_owned_string* tmp_str_t, kdl_owned_str
         else:
             result.number.type = KDL_NUMBER_TYPE_STRING_ENCODED
             tmp_str_v[0] = _py_str_to_kdl_str(str(value))
-            result.number.string = kdl_borrow_str(tmp_str_v)
+            result.number.str = kdl_borrow_str(tmp_str_v)
     elif isinstance(value, float):
         result.type = KDL_TYPE_NUMBER
         result.number.type = KDL_NUMBER_TYPE_FLOATING_POINT
@@ -223,7 +223,7 @@ cdef kdl_value _make_kdl_value(value, kdl_owned_string* tmp_str_t, kdl_owned_str
     elif isinstance(value, str):
         tmp_str_v[0] = _py_str_to_kdl_str(value)
         result.type = KDL_TYPE_STRING
-        result.string = kdl_borrow_str(tmp_str_v)
+        result.str = kdl_borrow_str(tmp_str_v)
     else:
         raise TypeError(str(type(value)))
 
@@ -520,7 +520,7 @@ def parse(str kdl_text, *, version="any"):
             kdl_destroy_parser(parser)
             return Document(root_node_list)
         elif ev.event == KDL_EVENT_PARSE_ERROR:
-            raise ParseError(_kdl_str_to_py_str(&ev.value.string))
+            raise ParseError(_kdl_str_to_py_str(&ev.value.str))
         elif ev.event == KDL_EVENT_START_NODE:
             current_node = Node()
             current_node.name = _kdl_str_to_py_str(&ev.name)

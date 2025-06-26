@@ -23,7 +23,7 @@ namespace {
         case KDL_NUMBER_TYPE_FLOATING_POINT:
             return n.floating_point;
         case KDL_NUMBER_TYPE_STRING_ENCODED:
-            return std::u8string{to_u8string_view(n.string)};
+            return std::u8string{to_u8string_view(n.str)};
         default:
             throw std::logic_error("invalid kdl_number");
         }
@@ -39,7 +39,7 @@ namespace {
         case KDL_TYPE_NUMBER:
             return Number{val.number};
         case KDL_TYPE_STRING:
-            return std::u8string{to_u8string_view(val.string)};
+            return std::u8string{to_u8string_view(val.str)};
         default:
             throw std::logic_error("invalid kdl_value");
         }
@@ -94,7 +94,7 @@ Number::operator kdl_number() const
                 result.floating_point = n;
             } else if constexpr (std::is_same_v<T, std::u8string>) {
                 result.type = KDL_NUMBER_TYPE_STRING_ENCODED;
-                result.string = to_kdl_str(n);
+                result.str = to_kdl_str(n);
             } else {
                 throw std::logic_error("incomplete visit");
             }
@@ -138,7 +138,7 @@ Value::operator kdl_value() const
                 result.number = (kdl_number)v;
             } else if constexpr (std::is_same_v<T, std::u8string>) {
                 result.type = KDL_TYPE_STRING;
-                result.string = to_kdl_str(v);
+                result.str = to_kdl_str(v);
             } else {
                 result.type = KDL_TYPE_NULL;
             }
@@ -166,7 +166,7 @@ Document Document::read_from(kdl_parser* parser)
         case KDL_EVENT_EOF:
             return doc;
         case KDL_EVENT_PARSE_ERROR:
-            throw ParseError(ev->value.string);
+            throw ParseError(ev->value.str);
         case KDL_EVENT_START_NODE: {
             auto name = to_u8string_view(ev->name);
             if (ev->value.type_annotation.data != nullptr) {

@@ -50,14 +50,14 @@ cdef extern from "kdl/value.h":
         kdl_number_type type
         long long integer
         double floating_point
-        kdl_str string
+        kdl_str str
 
     ctypedef struct kdl_value:
         kdl_type type
         kdl_str type_annotation
         bint boolean
         kdl_number number
-        kdl_str string
+        kdl_str str
 
 cdef extern from "kdl/parser.h":
     ctypedef enum kdl_event:
