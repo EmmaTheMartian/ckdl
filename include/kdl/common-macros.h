@@ -13,6 +13,7 @@
 #    define KDL_DEPRECATED(reason) __declspec(deprecated(reason))
 #else
 #    define KDL_NODISCARD
+#    define KDL_DEPRECATED(reason)
 #endif
 
 #if defined(_WIN32)

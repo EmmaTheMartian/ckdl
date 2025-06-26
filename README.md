@@ -11,6 +11,7 @@ modify the C code of the library when binding from V.
 
 - Renamed `kdl_number`'s `string` to `str`
 - Renamed `kdl_value`'s `string` to `str`
+- Define `KDL_DEPRECATED(reason)` when even when none of `__cplusplus`, `__GNUC__`, or `_MSC_VER` are defined.
 
 ---
 
